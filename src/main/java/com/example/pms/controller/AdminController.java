@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.pms.requestdtos.AdminRequest;
 import com.example.pms.responsedtos.AdminResponse;
 import com.example.pms.service.AdminService;
@@ -40,5 +40,16 @@ public class AdminController {
 		List<AdminResponse> responses=adminService.findAllAdmins();
 		return appResponseBuilder.success(HttpStatus.FOUND, "found all", responses);
 	}
+	
+	@GetMapping("/admins/{adminId}")
+	public ResponseEntity<ResponseStructure<AdminResponse>> findAdminById(@PathVariable String adminId){
+		   AdminResponse response=adminService.findAdminById(adminId);
+		   return appResponseBuilder.success(HttpStatus.FOUND, "admin with Id Found", response);
+	}
+//	@PutMapping("/admins/{AdminId}")
+//	public ResponseEntity<ResponseStructure<AdminResponse>> UpdateAdmin(@RequestBody AdminRequest adminRequest,@PathVariable int adminId){
+//		AdminResponse response=adminService.UpdateAdmin(adminRequest,adminId);
+//		return appResponseBuilder.success(HttpStatus.OK, "Admin Updated", response);
+//	}
 
 }
