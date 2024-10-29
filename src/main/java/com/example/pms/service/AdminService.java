@@ -1,7 +1,7 @@
 package com.example.pms.service;
 
+import java.util.List;
 import org.springframework.stereotype.Service;
-
 import com.example.pms.entity.Admin;
 import com.example.pms.mapper.AdminMapper;
 import com.example.pms.repository.AdminRepository;
@@ -24,6 +24,11 @@ public class AdminService {
 		 Admin admin=adminRepository.save(adminMapper.mapToAdmin(adminRequest, new Admin()));
 		 return adminMapper.mapToAdminResponse(admin);
 		
+	}
+
+	public List<AdminResponse> findAllAdmins() {
+		
+		return adminRepository.findAll().stream().map(adminMapper::mapToAdminResponse).toList();
 	}
 
 }
