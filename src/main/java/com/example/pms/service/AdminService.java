@@ -1,8 +1,11 @@
 package com.example.pms.service;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.example.pms.entity.Admin;
+import com.example.pms.exception.AdminNotFoundByIdException;
+import com.example.pms.exception.NoAdminFoundException;
 import com.example.pms.mapper.AdminMapper;
 import com.example.pms.repository.AdminRepository;
 import com.example.pms.requestdtos.AdminRequest;
@@ -27,8 +30,26 @@ public class AdminService {
 	}
 
 	public List<AdminResponse> findAllAdmins() {
-		
-		return adminRepository.findAll().stream().map(adminMapper::mapToAdminResponse).toList();
+		List<Admin> admins=adminRepository.findAll();
+		if(admins.isEmpty())
+			throw new NoAdminFoundException("No admins Present");
+		else {
+		return admins.stream().map(adminMapper::mapToAdminResponse).toList();
 	}
+	}
+	public AdminResponse findAdminById(String adminId) {
+		 Optional<Admin> optional=adminRepository.findById(adminId);
+		 if(optional.isPresent()) {
+			 return adminMapper.mapToAdminResponse(optional.get());
+		 }
+		 else {
+		throw new AdminNotFoundByIdException("failed to find user");
+		 }
+	}
+
+//	public AdminResponse UpdateAdmin(AdminRequest adminRequest, int adminId) {
+//		adminRepository.find
+//		return null;
+//	}
 
 }
