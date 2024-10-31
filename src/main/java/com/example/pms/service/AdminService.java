@@ -47,9 +47,29 @@ public class AdminService {
 		 }
 	}
 
-//	public AdminResponse UpdateAdmin(AdminRequest adminRequest, int adminId) {
-//		adminRepository.find
-//		return null;
+	public AdminResponse UpdateAdmin(AdminRequest adminRequest, String adminId) {
+		Optional<Admin> optional=adminRepository.findById(adminId);
+		if(optional.isPresent()) {
+			Admin admin=adminRepository.save(adminMapper.mapToAdmin(adminRequest, optional.get()));
+		    return adminMapper.mapToAdminResponse(admin);
+		}
+		else {
+			throw new AdminNotFoundByIdException("Failed to Update user");
+		}
+		
+	}
+//	public  AdminResponse deleteAdmin(String adminId) {
+//	Optional<Admin> optional=adminRepository.findById(adminId);
+//	if(optional.isPresent()) {
+//		Admin admin=optional.get();
+//				adminRepository.deleteById(adminId);
+//		return adminMapper.mapToAdminResponse(admin);
+//		
+//	}
+//	else {
+//		throw new AdminNotFoundByIdException("failed to delete the Admin");
+//	}
+		
 //	}
 
 }
