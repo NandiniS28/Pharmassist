@@ -54,11 +54,11 @@ public class AdminController {
 		AdminResponse response=adminService.UpdateAdmin(adminRequest,adminId);
 		return appResponseBuilder.success(HttpStatus.OK, "Admin Updated", response);
 	}
-//	@DeleteMapping("/delete/{adminId}")
-//	public ResponseEntity<ResponseStructure<AdminResponse>> deleteAdmin(@PathVariable String adminId){
-//		AdminResponse response=adminService.deleteAdmin(adminId);
-//		return appResponseBuilder.success(HttpStatus.OK, "admin deleted", response);
-//				
-//	}
+	@DeleteMapping("/delete/{adminId}")
+	public ResponseEntity<ResponseStructure<AdminResponse>> deleteAdmin(@PathVariable String adminId){
+		AdminResponse response=adminService.deleteAdmin(adminId);
+		return appResponseBuilder.success(HttpStatus.OK, "admin deleted", response);
+				
+	}
 
 }
