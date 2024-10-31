@@ -58,18 +58,18 @@ public class AdminService {
 		}
 		
 	}
-//	public  AdminResponse deleteAdmin(String adminId) {
-//	Optional<Admin> optional=adminRepository.findById(adminId);
-//	if(optional.isPresent()) {
-//		Admin admin=optional.get();
-//				adminRepository.deleteById(adminId);
-//		return adminMapper.mapToAdminResponse(admin);
-//		
-//	}
-//	else {
-//		throw new AdminNotFoundByIdException("failed to delete the Admin");
-//	}
+	public  AdminResponse deleteAdmin(String adminId) {
+	Optional<Admin> optional=adminRepository.findById(adminId);
+	if(optional.isPresent()) {
+		Admin admin=optional.get();
+				adminRepository.deleteById(adminId);
+		return adminMapper.mapToAdminResponse(admin);
 		
-//	}
+	}
+	else {
+		throw new AdminNotFoundByIdException("failed to delete the Admin");
+	}
+		
+	}
 
 }
