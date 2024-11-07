@@ -6,6 +6,7 @@ import com.example.pms.entity.Admin;
 import com.example.pms.entity.Pharmacy;
 import com.example.pms.exception.AdminNotFoundByIdException;
 import com.example.pms.exception.PharmacyNotFoundByAdminIdException;
+import com.example.pms.exception.PharmacyNotFoundByIdException;
 import com.example.pms.mapper.PharmacyMapper;
 import com.example.pms.repository.AdminRepository;
 import com.example.pms.repository.PharmacyRepository;
@@ -37,13 +38,36 @@ public class PharmacyService {
 			
 		})
 				.orElseThrow(()->new AdminNotFoundByIdException("failed to fing Admin"));
-	
 		
 	}
-
+	public PharmacyResponse findPharmacyByAdminId(String adminId) {
+		Admin admin=adminRepository.findById(adminId).
+		orElseThrow(()->new AdminNotFoundByIdException("admin not found by this id"));
+		
+		Pharmacy pharmacy=adminRepository.findPharmacyByAdminId(adminId);
+		if(pharmacy==null) {
+			throw new PharmacyNotFoundByAdminIdException("pharmacy not found by admin Id"+adminId);
+		}
+		return pharmacyMapper.mapToPharmacyResponse(pharmacy);
+	}
 	
+        public PharmacyResponse updatePharmacy(PharmacyRequest pharmacyRequest, String pharmacyId) {
+		
+		return pharmacyRepository.findById(pharmacyId)
+				.map(exPharmacy->{
+			pharmacyMapper.mapToPharmacy(pharmacyRequest, exPharmacy);
+			return pharmacyRepository.save(exPharmacy);
+		})
+				.map(pharmacyMapper::mapToPharmacyResponse).
+				orElseThrow(()->new PharmacyNotFoundByIdException("failed to update Pharmacy"));
+		
+		//pharmacyNotFoundByIdException should extends with runtime exception
+	
+	}	
+	
+}
 
 	
 	
     
-}
+

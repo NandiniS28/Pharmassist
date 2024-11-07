@@ -34,6 +34,18 @@ public class PharmacyController {
 	   PharmacyResponse response=pharmacyService.savePharmacy(pharmacyRequest,adminId);
 	   return appResponseBuilder.success(HttpStatus.CREATED, "Pharmacy saved", response);
 	}
+	@GetMapping("/pharmacies/{adminId}")
+	public ResponseEntity<ResponseStructure<PharmacyResponse>> findPharmacuByAdminId(@PathVariable String adminId){
+		PharmacyResponse response=pharmacyService.findPharmacyByAdminId(adminId);
+		return appResponseBuilder.success(HttpStatus.FOUND, "pharmacy associated with admin found", response);
+	}
 	
-
+	@PutMapping("/pharmacies/{pharmacyId}")
+	public ResponseEntity<ResponseStructure<PharmacyResponse>> updatePharmacy(@RequestBody PharmacyRequest pharmacyRequest,@PathVariable String pharmacyId){
+		
+		PharmacyResponse response=pharmacyService.updatePharmacy(pharmacyRequest,pharmacyId);
+		return appResponseBuilder.success(HttpStatus.OK, "pharmacy Updated", response);
+			
+		
+	}
 }
