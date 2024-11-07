@@ -40,16 +40,7 @@ public class PharmacyService {
 				.orElseThrow(()->new AdminNotFoundByIdException("failed to fing Admin"));
 		
 	}
-	public PharmacyResponse findPharmacyByAdminId(String adminId) {
-		Admin admin=adminRepository.findById(adminId).
-		orElseThrow(()->new AdminNotFoundByIdException("admin not found by this id"));
-		
-		Pharmacy pharmacy=adminRepository.findPharmacyByAdminId(adminId);
-		if(pharmacy==null) {
-			throw new PharmacyNotFoundByAdminIdException("pharmacy not found by admin Id"+adminId);
-		}
-		return pharmacyMapper.mapToPharmacyResponse(pharmacy);
-	}
+	
 	
         public PharmacyResponse updatePharmacy(PharmacyRequest pharmacyRequest, String pharmacyId) {
 		
@@ -64,6 +55,16 @@ public class PharmacyService {
 		//pharmacyNotFoundByIdException should extends with runtime exception
 	
 	}	
+        public PharmacyResponse findPharmacyByAdminId(String adminId) {
+    		Admin admin=adminRepository.findById(adminId).
+    		orElseThrow(()->new AdminNotFoundByIdException("admin not found by this id"));
+    		
+    		Pharmacy pharmacy=adminRepository.findPharmacyByAdminId(adminId);
+    		if(pharmacy==null) {
+    			throw new PharmacyNotFoundByAdminIdException("pharmacy not found by admin Id"+adminId);
+    		}
+    		return pharmacyMapper.mapToPharmacyResponse(pharmacy);
+    	}
 	
 }
 
