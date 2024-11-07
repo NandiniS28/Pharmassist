@@ -50,8 +50,8 @@ public class PharmacyService {
 		}
 		return pharmacyMapper.mapToPharmacyResponse(pharmacy);
 	}
-
-	public PharmacyResponse updatePharmacy(PharmacyRequest pharmacyRequest, String pharmacyId) {
+	
+        public PharmacyResponse updatePharmacy(PharmacyRequest pharmacyRequest, String pharmacyId) {
 		
 		return pharmacyRepository.findById(pharmacyId)
 				.map(exPharmacy->{
@@ -64,6 +64,7 @@ public class PharmacyService {
 		//pharmacyNotFoundByIdException should extends with runtime exception
 	
 	}	
+	
 }
 
 	
