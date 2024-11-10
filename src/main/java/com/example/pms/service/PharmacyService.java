@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import com.example.pms.entity.Admin;
 import com.example.pms.entity.Pharmacy;
 import com.example.pms.exception.AdminNotFoundByIdException;
-import com.example.pms.exception.PharmacyNotFoundByAdminIdException;
+import com.example.pms.exception.NoPharmacyFoundException;
 import com.example.pms.exception.PharmacyNotFoundByIdException;
 import com.example.pms.mapper.PharmacyMapper;
 import com.example.pms.repository.AdminRepository;
@@ -61,7 +61,7 @@ public class PharmacyService {
     		
     		Pharmacy pharmacy=adminRepository.findPharmacyByAdminId(adminId);
     		if(pharmacy==null) {
-    			throw new PharmacyNotFoundByAdminIdException("pharmacy not found by admin Id"+adminId);
+    			throw new NoPharmacyFoundException("pharmacy not found by admin Id"+adminId);
     		}
     		return pharmacyMapper.mapToPharmacyResponse(pharmacy);
     	}

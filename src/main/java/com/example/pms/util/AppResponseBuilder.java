@@ -12,6 +12,17 @@ public class AppResponseBuilder {
 	}
 
 	public static ResponseEntity<ErrorStructure> error(HttpStatus status,String message,String rootCause){
-		 return ResponseEntity.status(status).body(ErrorStructure.create(status.value(), message, rootCause));
+		 return ResponseEntity
+				 .status(status)
+				 .body(ErrorStructure.create(status.value(), message, rootCause));
 	}
+
+	public static ResponseEntity<SimpleResponseStructure> success(HttpStatus created, String message) {
+		
+		return ResponseEntity
+				.status(created)
+				.body(SimpleResponseStructure.create(created, message));
+	}
+
+	
 }
