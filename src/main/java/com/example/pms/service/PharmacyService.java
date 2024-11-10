@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import com.example.pms.entity.Admin;
 import com.example.pms.entity.Pharmacy;
 import com.example.pms.exception.AdminNotFoundByIdException;
-import com.example.pms.exception.PharmacyNotFoundByAdminIdException;
+import com.example.pms.exception.NoPharmacyFoundException;
 import com.example.pms.exception.PharmacyNotFoundByIdException;
 import com.example.pms.mapper.PharmacyMapper;
 import com.example.pms.repository.AdminRepository;
@@ -40,18 +40,9 @@ public class PharmacyService {
 				.orElseThrow(()->new AdminNotFoundByIdException("failed to fing Admin"));
 		
 	}
-	public PharmacyResponse findPharmacyByAdminId(String adminId) {
-		Admin admin=adminRepository.findById(adminId).
-		orElseThrow(()->new AdminNotFoundByIdException("admin not found by this id"));
-		
-		Pharmacy pharmacy=adminRepository.findPharmacyByAdminId(adminId);
-		if(pharmacy==null) {
-			throw new PharmacyNotFoundByAdminIdException("pharmacy not found by admin Id"+adminId);
-		}
-		return pharmacyMapper.mapToPharmacyResponse(pharmacy);
-	}
-
-	public PharmacyResponse updatePharmacy(PharmacyRequest pharmacyRequest, String pharmacyId) {
+	
+	
+        public PharmacyResponse updatePharmacy(PharmacyRequest pharmacyRequest, String pharmacyId) {
 		
 		return pharmacyRepository.findById(pharmacyId)
 				.map(exPharmacy->{
@@ -64,6 +55,17 @@ public class PharmacyService {
 		//pharmacyNotFoundByIdException should extends with runtime exception
 	
 	}	
+        public PharmacyResponse findPharmacyByAdminId(String adminId) {
+    		Admin admin=adminRepository.findById(adminId).
+    		orElseThrow(()->new AdminNotFoundByIdException("admin not found by this id"));
+    		
+    		Pharmacy pharmacy=adminRepository.findPharmacyByAdminId(adminId);
+    		if(pharmacy==null) {
+    			throw new NoPharmacyFoundException("pharmacy not found by admin Id"+adminId);
+    		}
+    		return pharmacyMapper.mapToPharmacyResponse(pharmacy);
+    	}
+	
 }
 
 	

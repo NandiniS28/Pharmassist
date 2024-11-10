@@ -1,6 +1,7 @@
 package com.example.pms.exception;
 
-public class PharmacyNotFoundByIdException extends RuntimeException{
+public class InvalidFileFormatException extends RuntimeException {
+	
 	
 	private final String message;
 
@@ -8,7 +9,7 @@ public class PharmacyNotFoundByIdException extends RuntimeException{
 		return message;
 	}
 
-	public PharmacyNotFoundByIdException(String message) {
+	public InvalidFileFormatException(String message) {
 		super();
 		this.message = message;
 	}
