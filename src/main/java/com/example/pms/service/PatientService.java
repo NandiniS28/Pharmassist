@@ -3,6 +3,7 @@ package com.example.pms.service;
 import org.springframework.stereotype.Service;
 
 import com.example.pms.entity.Patient;
+import com.example.pms.exception.PatientNotFoundByIdException;
 import com.example.pms.exception.PharmacyNotFoundByIdException;
 import com.example.pms.mapper.PatientMapper;
 import com.example.pms.repository.PatientRepository;
@@ -37,7 +38,17 @@ public class PatientService {
 							})
 				.orElseThrow(()-> new PharmacyNotFoundByIdException("failed to find Pharmacy"));
 	}
-	
+	public PatientResponse updatePatient(PatientRequest patientRequest, String patientId) {
+
+		return 	patientRepository.findById(patientId)
+				.map(exPatient -> {
+					patientMapper.mapToPatient(patientRequest, exPatient);
+					return patientRepository.save(exPatient);
+				})
+				.map(patientMapper::mapToPatientResponse)
+				.orElseThrow(() -> new PatientNotFoundByIdException("Failed to update Patient"));
+
+	}
 	
 
 }
