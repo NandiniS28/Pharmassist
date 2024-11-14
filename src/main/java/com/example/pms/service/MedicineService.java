@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
 import org.apache.poi.ss.usermodel.Row;
@@ -18,27 +20,31 @@ import com.example.pms.enums.Form;
 import com.example.pms.exception.InvalidDataException;
 import com.example.pms.exception.InvalidDateFormatException;
 import com.example.pms.exception.InvalidFileFormatException;
+import com.example.pms.exception.NoMedicinesFoundException;
 import com.example.pms.exception.PharmacyNotFoundByIdException;
+import com.example.pms.mapper.MedicineMapper;
 import com.example.pms.repository.MedicineRepository;
 import com.example.pms.repository.PharmacyRepository;
+import com.example.pms.responsedtos.MedicineResponse;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @Service
-public class MedicineService {
+public class MedicineService{
 	
 	private final MedicineRepository medicineRepository;
+	private final MedicineMapper medicineMapper;
 	private final PharmacyRepository pharmacyRepository;
-
-
-	public MedicineService(MedicineRepository medicineRepository, PharmacyRepository pharmacyRepository) {
+	
+	
+	public MedicineService(MedicineRepository medicineRepository, MedicineMapper medicineMapper,
+			PharmacyRepository pharmacyRepository) {
 		super();
 		this.medicineRepository = medicineRepository;
+		this.medicineMapper = medicineMapper;
 		this.pharmacyRepository = pharmacyRepository;
 	}
-
-
 
 	@Transactional
 	public String uploadMedicines(MultipartFile file,String pharmacyId) {
@@ -60,8 +66,7 @@ public class MedicineService {
 
 						saveMedicine(medicine);
 
-						pharmacy.getMedicines().add(medicine);
-//						add(medicine);										
+						pharmacy.getMedicines().add(medicine);										
 					}
 				}
 			}
@@ -88,7 +93,8 @@ public class MedicineService {
 			medicine.setPrice(row.getCell(6).getNumericCellValue());
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			medicine.setExpiryDate(LocalDate.parse(row.getCell(7).getStringCellValue(), formatter));
-			medicine.setStockQuantity((int) row.getCell(8).getNumericCellValue());
+//			medicine.setStockQuantity((int) row.getCell(8).getNumericCellValue());
+			medicine.setStockQuantity(ThreadLocalRandom.current().nextInt(50, 101));
 
 		}
 		catch(NumberFormatException e) {
@@ -110,8 +116,30 @@ public class MedicineService {
 		medicineRepository.save(medicine);
 
 	}
+
+	public List<MedicineResponse> findMedicineByNameOrIngredients(String text) {
+		
+		 text = "%"+text+"%";
+		 List<Medicine> medicines=medicineRepository.findByNameLikeIgnoreCaseOrIngredientsLikeIgnoreCase(text, text);
+		 if(medicines.isEmpty())
+			 throw new NoMedicinesFoundException("No medicine found");
+		 else
+			 
+		return medicines.stream()
+				.map(medicineMapper :: mapToMedicineResponse)
+				.toList();
+	}
+
+	
+	}
+
+
+	
+
+
+
 	
 	
-}
+
 	
 

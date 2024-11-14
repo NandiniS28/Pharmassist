@@ -23,7 +23,7 @@ public class PatientController {
 		this.patientService = patientService;
 		this.appResponseBuilder = appResponseBuilder;
 	}
-	@PostMapping("/pharmacies/{pharmacyId}")
+	@PostMapping("/pharmacies/{pharmacyId}/patients")
 	public ResponseEntity<ResponseStructure<PatientResponse>> addPatients(@RequestBody PatientRequest patientRequest, @PathVariable String pharmacyId)
 	{
 		PatientResponse response=patientService.addPatients(patientRequest,pharmacyId);
