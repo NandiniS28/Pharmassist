@@ -2,6 +2,8 @@ package com.example.pms.service;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.pms.entity.Admin;
 import com.example.pms.exception.AdminNotFoundByIdException;
@@ -11,21 +13,27 @@ import com.example.pms.repository.AdminRepository;
 import com.example.pms.requestdtos.AdminRequest;
 import com.example.pms.responsedtos.AdminResponse;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class AdminService {
 	
+	private final PasswordEncoder passwordEncoder;
 	private final AdminRepository adminRepository;
 	private final AdminMapper adminMapper;
 	
-	public AdminService(AdminRepository adminRepository, AdminMapper adminMapper) {
+	public AdminService(AdminRepository adminRepository, AdminMapper adminMapper,PasswordEncoder passwordEncoder) {
 		super();
 		this.adminRepository = adminRepository;
 		this.adminMapper = adminMapper;
+		this.passwordEncoder=passwordEncoder;
 	}
-	
 	public AdminResponse saveAdmin(AdminRequest adminRequest) {
-		 Admin admin=adminRepository.save(adminMapper.mapToAdmin(adminRequest, new Admin()));
-		 return adminMapper.mapToAdminResponse(admin);
+//		 Admin admin=adminRepository.save(adminMapper
+		Admin admin=adminMapper.mapToAdmin(adminRequest, new Admin());
+		 admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+		Admin admin1= adminRepository.save(admin);
+		 return adminMapper.mapToAdminResponse(admin1);
 		
 	}
 
